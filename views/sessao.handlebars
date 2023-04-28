@@ -1,0 +1,829 @@
+<link rel="stylesheet" href="/css/cadastroFisioterapeuta.css" />
+<div class="top">
+    <h2>Sessão</h2>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.11/jquery.mask.min.js"></script>
+
+<script src="/socket.io/socket.io.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+
+	<link rel="stylesheet" type="text/css" href="/css/vibracao.css" media="screen" />
+	<!-- Chart - aqui chamamos nossa lib que gera o gráfico. -->
+	<script src="/js/Chart.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+
+
+<div id="formInicialCampos"class="campo">
+    <div class="campo_obrigatorio">
+        <label><i style="color: #37bbf8;" class="fas fa-info-circle" aria-hidden="true"></i> Campos
+            obrigatórios</label>
+    </div>
+</div>
+<br>
+
+<div id="formInicial" class="form">
+    <form method="post" action="/sessao">
+		<div class="container">
+			<div class="row">
+				<div class="col-sm">
+					<i style="color: #37bbf8;" class="fas fa-info-circle" aria-hidden="true"></i>
+					<label class="my-1 mr-2" for="fisioterapeuta_id">Selecionar Fisioterapeuta</label>
+					<select name="fisioterapeuta_id" class="custom-select my-1 mr-sm-2" id="fisioterapeuta_id">
+						{{#each fisioterapeutas}}
+							<option value="{{dataValues.id}}">{{dataValues.name}}</option>
+						{{/each}}
+					</select>
+            	</div>
+				<div class="col-sm">
+					<i style="color: #37bbf8;" class="fas fa-info-circle" aria-hidden="true"></i>
+					<label class="my-1 mr-2" for="paciente_id">Selecionar Paciente</label>
+					<select name="paciente_id" class="custom-select my-1 mr-sm-2" id="paciente_id">
+						{{#each pacientes}}
+							<option value="{{dataValues.id}}">{{dataValues.name}}</option>
+						{{/each}}
+					</select>
+            	</div>
+				<div class="col-sm">
+					<i style="color: #37bbf8;" class="fas fa-info-circle" aria-hidden="true"></i>
+					<label class="my-1 mr-2" for="sensor">Selecionar Sensor</label>
+					<select name="sensor" class="custom-select my-1 mr-sm-2" id="sensor">
+						<option value="true">Sensor Acelerômetro</option>
+						<option value="false">Sensor Vibração</option>
+					</select>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm">
+					<label class="my-1 mr-2" for="tecnica_id">Técnica</label>
+					<select name="tecnica_id" class="custom-select my-1 mr-sm-2" id="tecnica_id">
+						<option value="null">Selecionar Técnica</option>
+						{{#each tecnicas}}
+							<option value="{{dataValues.id}}">{{dataValues.nome}}</option>
+						{{/each}}
+					</select>
+					<span>+ Vibrocompressão Torácica</span>
+				</div>
+				<div class="col-sm">
+					<label for="freq_respiratoria_inicial">Frequência Respiratória</label>
+					<input name="freq_respiratoria_inicial" type="number" class="form-control" id="freq_respiratoria_inicial" placeholder="Digite a frequência respiratória" />
+            	</div>
+			</div>
+			<div class="row">
+				<div class="col-sm">
+					<label for="freq_cardiaca_inicial">Frequência Cardíaca</label>
+					<input name="freq_cardiaca_inicial" type="number" class="form-control" id="freq_cardiaca_inicial" placeholder="Digite a frequência cardíaca" />
+            	</div>
+				<div class="col-sm">
+					<label for="sat_oxigenio_inicial">Saturação do Oxigênio</label>
+					<input name="sat_oxigenio_inicial" type="number" class="form-control" id="sat_oxigenio_inicial" placeholder="Digite a saturação do oxigênio" />
+            	</div>
+				<div class="col-sm">
+					<label for="pressao_arterial_inicial">Pressão Arterial</label>
+					<input name="pressao_arterial_inicial" type="number" class="form-control" id="pressao_arterial_inicial" placeholder="Digite a pressão arterial" />
+            	</div>
+			</div>
+			<div class="row">
+				<div class="col-sm">
+					<label for="grau_inicial">Grau de Comprometimento Pulmonar</label>
+					<div class="row">
+						<div class="form-check col-sm">
+							<input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked>
+							<label class="form-check-label" for="flexRadioDefault1">1.   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-emoji-sunglasses" viewBox="0 0 16 16">
+  <path d="M4.968 9.75a.5.5 0 1 0-.866.5A4.498 4.498 0 0 0 8 12.5a4.5 4.5 0 0 0 3.898-2.25.5.5 0 1 0-.866-.5A3.498 3.498 0 0 1 8 11.5a3.498 3.498 0 0 1-3.032-1.75zM7 5.116V5a1 1 0 0 0-1-1H3.28a1 1 0 0 0-.97 1.243l.311 1.242A2 2 0 0 0 4.561 8H5a2 2 0 0 0 1.994-1.839A2.99 2.99 0 0 1 8 6c.393 0 .74.064 1.006.161A2 2 0 0 0 11 8h.438a2 2 0 0 0 1.94-1.515l.311-1.242A1 1 0 0 0 12.72 4H10a1 1 0 0 0-1 1v.116A4.22 4.22 0 0 0 8 5c-.35 0-.69.04-1 .116z"/>
+  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-1 0A7 7 0 1 0 1 8a7 7 0 0 0 14 0z"/>
+</svg></label>
+						</div>
+						<div class="form-check col-sm">
+							<input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
+							<label class="form-check-label" for="flexRadioDefault2">2.  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-emoji-smile" viewBox="0 0 16 16">
+  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+  <path d="M4.285 9.567a.5.5 0 0 1 .683.183A3.498 3.498 0 0 0 8 11.5a3.498 3.498 0 0 0 3.032-1.75.5.5 0 1 1 .866.5A4.498 4.498 0 0 1 8 12.5a4.498 4.498 0 0 1-3.898-2.25.5.5 0 0 1 .183-.683zM7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5zm4 0c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5z"/>
+</svg></label>
+						</div>
+						<div class="form-check col-sm">
+							<input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3">
+							<label class="form-check-label" for="flexRadioDefault3">3.  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-emoji-neutral" viewBox="0 0 16 16">
+  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+  <path d="M4 10.5a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 0-1h-7a.5.5 0 0 0-.5.5zm3-4C7 5.672 6.552 5 6 5s-1 .672-1 1.5S5.448 8 6 8s1-.672 1-1.5zm4 0c0-.828-.448-1.5-1-1.5s-1 .672-1 1.5S9.448 8 10 8s1-.672 1-1.5z"/>
+</svg></label>
+						</div>
+						<div class="form-check col-sm">
+							<input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault4">
+							<label class="form-check-label" for="flexRadioDefault4">4.  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-emoji-frown" viewBox="0 0 16 16">
+  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+  <path d="M4.285 12.433a.5.5 0 0 0 .683-.183A3.498 3.498 0 0 1 8 10.5c1.295 0 2.426.703 3.032 1.75a.5.5 0 0 0 .866-.5A4.498 4.498 0 0 0 8 9.5a4.5 4.5 0 0 0-3.898 2.25.5.5 0 0 0 .183.683zM7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5zm4 0c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5z"/>
+</svg></label>
+						</div>
+						<div class="form-check col-sm">
+							<input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault5">
+							<label class="form-check-label" for="flexRadioDefault5">5.  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-emoji-angry" viewBox="0 0 16 16">
+  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+  <path d="M4.285 12.433a.5.5 0 0 0 .683-.183A3.498 3.498 0 0 1 8 10.5c1.295 0 2.426.703 3.032 1.75a.5.5 0 0 0 .866-.5A4.498 4.498 0 0 0 8 9.5a4.5 4.5 0 0 0-3.898 2.25.5.5 0 0 0 .183.683zm6.991-8.38a.5.5 0 1 1 .448.894l-1.009.504c.176.27.285.64.285 1.049 0 .828-.448 1.5-1 1.5s-1-.672-1-1.5c0-.247.04-.48.11-.686a.502.502 0 0 1 .166-.761l2-1zm-6.552 0a.5.5 0 0 0-.448.894l1.009.504A1.94 1.94 0 0 0 5 6.5C5 7.328 5.448 8 6 8s1-.672 1-1.5c0-.247-.04-.48-.11-.686a.502.502 0 0 0-.166-.761l-2-1z"/>
+</svg></label>
+						</div>
+					</div>
+            	</div>
+			</div>
+			<div class="row">
+				<div class="col-sm">
+					<button type="button" onClick="pages()" class="btn btn-primary button">
+						Iniciar
+					</button>
+				</div>
+			</div>
+		</div>            
+    </form>
+</div>
+
+    <!-- VIBRACAO -->
+    <div id="vibracaoDiv" class="principal">
+		<div class="row">
+			<div class="w-100"></div>
+			<div class="col graph">
+				<canvas id="myChart" width="300" height="200"></canvas>
+			</div>
+			<div class="col graph">
+				<canvas id="myChartY" width="300" height="200"></canvas>
+			</div>
+			<div class="w-100"></div>
+			<div class="col graph">
+				<canvas id="myChartZ" width="300" height="200"></canvas>
+			</div>
+			<div class="col graph">
+				<div class="d-flex justify-content-center">
+					<div class="dados">
+						<h3>Controle</h3>
+						<button id="comeco" type="button" class="btn btn-dark" onclick="comecarTransmissao()">Começar</button><br>
+						<button id="parada" type="button" class="btn btn-dark" onclick="pararTransmissao()">Parar</button>
+					</div>
+
+					<div class="dados">
+						<h3>Dados</h3>
+						<h5>Pico Eixo X: <span id="picoX">0</span></h5>
+						<h5>Pico Eixo Y: <span id="picoY">0</span></h5>
+						<h5>Pico Eixo Z: <span id="picoZ">0</span></h5>
+					</div>
+
+					<div class="dados">
+						<h3>Media</h3>
+						<h5>Hz Eixo X: <span id="mediapicoX">0</span></h5>
+						<h5>Hz Eixo Y: <span id="mediapicoY">0</span></h5>
+						<h5>Hz Eixo Z: <span id="mediapicoZ">0</span></h5>
+					</div>
+				</div>
+
+				<div class="d-flex justify-content-center">
+					<div id="estadoId" class="col estado">Estado</div>
+				</div>
+				
+				<div>
+					<span id="hour">00</span>:<span id="minute">00</span>:<span id="second">00</span>:<span id="millisecond">000</span>
+				</div>
+                <div class="d-flex justify-content-center">
+					<button type="button" onClick="pages()" class="btn btn-primary button">
+						Avançar
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="formFinalCampos">
+		<div class="container">
+			<div class="row">
+				<div class="col-sm">
+					<label for="freq_respiratoria_final">Frequência Respiratória</label>
+					<input name="freq_respiratoria_final" type="number" class="form-control" id="freq_respiratoria_final" placeholder="Digite a frequência respiratória" />
+            	</div>
+			</div>
+			<div class="row">
+				<div class="col-sm">
+					<label for="freq_cardiaca_final">Frequência Cardíaca</label>
+					<input name="freq_cardiaca_final" type="number" class="form-control" id="freq_cardiaca_final" placeholder="Digite a frequência cardíaca" />
+            	</div>
+				<div class="col-sm">
+					<label for="sat_oxigenio_final">Saturação do Oxigênio</label>
+					<input name="sat_oxigenio_final" type="number" class="form-control" id="sat_oxigenio_final" placeholder="Digite a saturação do oxigênio" />
+            	</div>
+				<div class="col-sm">
+					<label for="pressao_arterial_final">Pressão Arterial</label>
+					<input name="pressao_arterial_final" type="number" class="form-control" id="pressao_arterial_final" placeholder="Digite a pressão arterial" />
+            	</div>
+			</div>
+			<div class="row">
+				<div class="col-sm">
+					<label for="grau_final">Grau de Comprometimento Pulmonar</label>
+					<div class="row">
+						<div class="form-check col-sm">
+							<input class="form-check-input" type="radio" name="flexRadioDefaultFinal" id="flexRadioDefaultFinal1" checked>
+							<label class="form-check-label" for="flexRadioDefaultFinal1">1.   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-emoji-sunglasses" viewBox="0 0 16 16">
+  <path d="M4.968 9.75a.5.5 0 1 0-.866.5A4.498 4.498 0 0 0 8 12.5a4.5 4.5 0 0 0 3.898-2.25.5.5 0 1 0-.866-.5A3.498 3.498 0 0 1 8 11.5a3.498 3.498 0 0 1-3.032-1.75zM7 5.116V5a1 1 0 0 0-1-1H3.28a1 1 0 0 0-.97 1.243l.311 1.242A2 2 0 0 0 4.561 8H5a2 2 0 0 0 1.994-1.839A2.99 2.99 0 0 1 8 6c.393 0 .74.064 1.006.161A2 2 0 0 0 11 8h.438a2 2 0 0 0 1.94-1.515l.311-1.242A1 1 0 0 0 12.72 4H10a1 1 0 0 0-1 1v.116A4.22 4.22 0 0 0 8 5c-.35 0-.69.04-1 .116z"/>
+  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-1 0A7 7 0 1 0 1 8a7 7 0 0 0 14 0z"/>
+</svg></label>
+						</div>
+						<div class="form-check col-sm">
+							<input class="form-check-input" type="radio" name="flexRadioDefaultFinal" id="flexRadioDefaultFinal2">
+							<label class="form-check-label" for="flexRadioDefaultFinal2">2.  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-emoji-smile" viewBox="0 0 16 16">
+  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+  <path d="M4.285 9.567a.5.5 0 0 1 .683.183A3.498 3.498 0 0 0 8 11.5a3.498 3.498 0 0 0 3.032-1.75.5.5 0 1 1 .866.5A4.498 4.498 0 0 1 8 12.5a4.498 4.498 0 0 1-3.898-2.25.5.5 0 0 1 .183-.683zM7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5zm4 0c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5z"/>
+</svg></label>
+						</div>
+						<div class="form-check col-sm">
+							<input class="form-check-input" type="radio" name="flexRadioDefaultFinal" id="flexRadioDefaultFinal3">
+							<label class="form-check-label" for="flexRadioDefaultFinal3">3.  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-emoji-neutral" viewBox="0 0 16 16">
+  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+  <path d="M4 10.5a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 0-1h-7a.5.5 0 0 0-.5.5zm3-4C7 5.672 6.552 5 6 5s-1 .672-1 1.5S5.448 8 6 8s1-.672 1-1.5zm4 0c0-.828-.448-1.5-1-1.5s-1 .672-1 1.5S9.448 8 10 8s1-.672 1-1.5z"/>
+</svg></label>
+						</div>
+						<div class="form-check col-sm">
+							<input class="form-check-input" type="radio" name="flexRadioDefaultFinal" id="flexRadioDefaultFinal4">
+							<label class="form-check-label" for="flexRadioDefaultFinal4">4.  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-emoji-frown" viewBox="0 0 16 16">
+  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+  <path d="M4.285 12.433a.5.5 0 0 0 .683-.183A3.498 3.498 0 0 1 8 10.5c1.295 0 2.426.703 3.032 1.75a.5.5 0 0 0 .866-.5A4.498 4.498 0 0 0 8 9.5a4.5 4.5 0 0 0-3.898 2.25.5.5 0 0 0 .183.683zM7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5zm4 0c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5z"/>
+</svg></label>
+						</div>
+						<div class="form-check col-sm">
+							<input class="form-check-input" type="radio" name="flexRadioDefaultFinal" id="flexRadioDefaultFinal5">
+							<label class="form-check-label" for="flexRadioDefaultFinal5">5.  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-emoji-angry" viewBox="0 0 16 16">
+  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+  <path d="M4.285 12.433a.5.5 0 0 0 .683-.183A3.498 3.498 0 0 1 8 10.5c1.295 0 2.426.703 3.032 1.75a.5.5 0 0 0 .866-.5A4.498 4.498 0 0 0 8 9.5a4.5 4.5 0 0 0-3.898 2.25.5.5 0 0 0 .183.683zm6.991-8.38a.5.5 0 1 1 .448.894l-1.009.504c.176.27.285.64.285 1.049 0 .828-.448 1.5-1 1.5s-1-.672-1-1.5c0-.247.04-.48.11-.686a.502.502 0 0 1 .166-.761l2-1zm-6.552 0a.5.5 0 0 0-.448.894l1.009.504A1.94 1.94 0 0 0 5 6.5C5 7.328 5.448 8 6 8s1-.672 1-1.5c0-.247-.04-.48-.11-.686a.502.502 0 0 0-.166-.761l-2-1z"/>
+</svg></label>
+						</div>
+					</div>
+            	</div>
+			</div>
+			<div class="row">
+				<div class="col-sm">
+					<label for="estado_paciente">Estado do paciente (fisioterapeuta)</label>
+					<div class="row">
+						<div class="form-check col-sm">
+							<input class="form-check-input" type="radio" name="flexEstadoPaciente" id="flexEstadoPaciente1" checked>
+							<label class="form-check-label" for="flexEstadoPaciente1">1.   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-emoji-sunglasses" viewBox="0 0 16 16">
+  <path d="M4.968 9.75a.5.5 0 1 0-.866.5A4.498 4.498 0 0 0 8 12.5a4.5 4.5 0 0 0 3.898-2.25.5.5 0 1 0-.866-.5A3.498 3.498 0 0 1 8 11.5a3.498 3.498 0 0 1-3.032-1.75zM7 5.116V5a1 1 0 0 0-1-1H3.28a1 1 0 0 0-.97 1.243l.311 1.242A2 2 0 0 0 4.561 8H5a2 2 0 0 0 1.994-1.839A2.99 2.99 0 0 1 8 6c.393 0 .74.064 1.006.161A2 2 0 0 0 11 8h.438a2 2 0 0 0 1.94-1.515l.311-1.242A1 1 0 0 0 12.72 4H10a1 1 0 0 0-1 1v.116A4.22 4.22 0 0 0 8 5c-.35 0-.69.04-1 .116z"/>
+  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-1 0A7 7 0 1 0 1 8a7 7 0 0 0 14 0z"/>
+</svg></label>
+						</div>
+						<div class="form-check col-sm">
+							<input class="form-check-input" type="radio" name="flexEstadoPaciente" id="flexEstadoPaciente2">
+							<label class="form-check-label" for="flexEstadoPaciente2">2.  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-emoji-smile" viewBox="0 0 16 16">
+  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+  <path d="M4.285 9.567a.5.5 0 0 1 .683.183A3.498 3.498 0 0 0 8 11.5a3.498 3.498 0 0 0 3.032-1.75.5.5 0 1 1 .866.5A4.498 4.498 0 0 1 8 12.5a4.498 4.498 0 0 1-3.898-2.25.5.5 0 0 1 .183-.683zM7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5zm4 0c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5z"/>
+</svg></label>
+						</div>
+						<div class="form-check col-sm">
+							<input class="form-check-input" type="radio" name="flexEstadoPaciente" id="flexEstadoPaciente3">
+							<label class="form-check-label" for="flexEstadoPaciente3">3.  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-emoji-neutral" viewBox="0 0 16 16">
+  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+  <path d="M4 10.5a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 0-1h-7a.5.5 0 0 0-.5.5zm3-4C7 5.672 6.552 5 6 5s-1 .672-1 1.5S5.448 8 6 8s1-.672 1-1.5zm4 0c0-.828-.448-1.5-1-1.5s-1 .672-1 1.5S9.448 8 10 8s1-.672 1-1.5z"/>
+</svg></label>
+						</div>
+						<div class="form-check col-sm">
+							<input class="form-check-input" type="radio" name="flexEstadoPaciente" id="flexEstadoPaciente4">
+							<label class="form-check-label" for="flexEstadoPaciente4">4.  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-emoji-frown" viewBox="0 0 16 16">
+  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+  <path d="M4.285 12.433a.5.5 0 0 0 .683-.183A3.498 3.498 0 0 1 8 10.5c1.295 0 2.426.703 3.032 1.75a.5.5 0 0 0 .866-.5A4.498 4.498 0 0 0 8 9.5a4.5 4.5 0 0 0-3.898 2.25.5.5 0 0 0 .183.683zM7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5zm4 0c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5z"/>
+</svg></label>
+						</div>
+						<div class="form-check col-sm">
+							<input class="form-check-input" type="radio" name="flexEstadoPaciente" id="flexEstadoPaciente5">
+							<label class="form-check-label" for="flexEstadoPaciente5">5.  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-emoji-angry" viewBox="0 0 16 16">
+  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+  <path d="M4.285 12.433a.5.5 0 0 0 .683-.183A3.498 3.498 0 0 1 8 10.5c1.295 0 2.426.703 3.032 1.75a.5.5 0 0 0 .866-.5A4.498 4.498 0 0 0 8 9.5a4.5 4.5 0 0 0-3.898 2.25.5.5 0 0 0 .183.683zm6.991-8.38a.5.5 0 1 1 .448.894l-1.009.504c.176.27.285.64.285 1.049 0 .828-.448 1.5-1 1.5s-1-.672-1-1.5c0-.247.04-.48.11-.686a.502.502 0 0 1 .166-.761l2-1zm-6.552 0a.5.5 0 0 0-.448.894l1.009.504A1.94 1.94 0 0 0 5 6.5C5 7.328 5.448 8 6 8s1-.672 1-1.5c0-.247-.04-.48-.11-.686a.502.502 0 0 0-.166-.761l-2-1z"/>
+</svg></label>
+						</div>
+					</div>
+            	</div>
+			</div>
+			<div class="row">
+				<div class="col-sm">
+					<label for="grau_final">Estado do paciente (paciente)</label>
+					<div class="row">
+						<div class="form-check col-sm">
+							<input class="form-check-input" type="radio" name="flexEstadoFisio" id="flexEstadoFisio1" checked>
+							<label class="form-check-label" for="flexEstadoFisio1">1.   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-emoji-sunglasses" viewBox="0 0 16 16">
+  <path d="M4.968 9.75a.5.5 0 1 0-.866.5A4.498 4.498 0 0 0 8 12.5a4.5 4.5 0 0 0 3.898-2.25.5.5 0 1 0-.866-.5A3.498 3.498 0 0 1 8 11.5a3.498 3.498 0 0 1-3.032-1.75zM7 5.116V5a1 1 0 0 0-1-1H3.28a1 1 0 0 0-.97 1.243l.311 1.242A2 2 0 0 0 4.561 8H5a2 2 0 0 0 1.994-1.839A2.99 2.99 0 0 1 8 6c.393 0 .74.064 1.006.161A2 2 0 0 0 11 8h.438a2 2 0 0 0 1.94-1.515l.311-1.242A1 1 0 0 0 12.72 4H10a1 1 0 0 0-1 1v.116A4.22 4.22 0 0 0 8 5c-.35 0-.69.04-1 .116z"/>
+  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-1 0A7 7 0 1 0 1 8a7 7 0 0 0 14 0z"/>
+</svg></label>
+						</div>
+						<div class="form-check col-sm">
+							<input class="form-check-input" type="radio" name="flexEstadoFisio" id="flexEstadoFisio2">
+							<label class="form-check-label" for="flexEstadoFisio2">2.  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-emoji-smile" viewBox="0 0 16 16">
+  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+  <path d="M4.285 9.567a.5.5 0 0 1 .683.183A3.498 3.498 0 0 0 8 11.5a3.498 3.498 0 0 0 3.032-1.75.5.5 0 1 1 .866.5A4.498 4.498 0 0 1 8 12.5a4.498 4.498 0 0 1-3.898-2.25.5.5 0 0 1 .183-.683zM7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5zm4 0c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5z"/>
+</svg></label>
+						</div>
+						<div class="form-check col-sm">
+							<input class="form-check-input" type="radio" name="flexEstadoFisio" id="flexEstadoFisio3">
+							<label class="form-check-label" for="flexEstadoFisio3">3.  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-emoji-neutral" viewBox="0 0 16 16">
+  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+  <path d="M4 10.5a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 0-1h-7a.5.5 0 0 0-.5.5zm3-4C7 5.672 6.552 5 6 5s-1 .672-1 1.5S5.448 8 6 8s1-.672 1-1.5zm4 0c0-.828-.448-1.5-1-1.5s-1 .672-1 1.5S9.448 8 10 8s1-.672 1-1.5z"/>
+</svg></label>
+						</div>
+						<div class="form-check col-sm">
+							<input class="form-check-input" type="radio" name="flexEstadoFisio" id="flexEstadoFisio4">
+							<label class="form-check-label" for="flexEstadoFisio4">4.  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-emoji-frown" viewBox="0 0 16 16">
+  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+  <path d="M4.285 12.433a.5.5 0 0 0 .683-.183A3.498 3.498 0 0 1 8 10.5c1.295 0 2.426.703 3.032 1.75a.5.5 0 0 0 .866-.5A4.498 4.498 0 0 0 8 9.5a4.5 4.5 0 0 0-3.898 2.25.5.5 0 0 0 .183.683zM7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5zm4 0c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5z"/>
+</svg></label>
+						</div>
+						<div class="form-check col-sm">
+							<input class="form-check-input" type="radio" name="flexEstadoFisio" id="flexEstadoFisio5">
+							<label class="form-check-label" for="flexEstadoFisio5">5.  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-emoji-angry" viewBox="0 0 16 16">
+  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+  <path d="M4.285 12.433a.5.5 0 0 0 .683-.183A3.498 3.498 0 0 1 8 10.5c1.295 0 2.426.703 3.032 1.75a.5.5 0 0 0 .866-.5A4.498 4.498 0 0 0 8 9.5a4.5 4.5 0 0 0-3.898 2.25.5.5 0 0 0 .183.683zm6.991-8.38a.5.5 0 1 1 .448.894l-1.009.504c.176.27.285.64.285 1.049 0 .828-.448 1.5-1 1.5s-1-.672-1-1.5c0-.247.04-.48.11-.686a.502.502 0 0 1 .166-.761l2-1zm-6.552 0a.5.5 0 0 0-.448.894l1.009.504A1.94 1.94 0 0 0 5 6.5C5 7.328 5.448 8 6 8s1-.672 1-1.5c0-.247-.04-.48-.11-.686a.502.502 0 0 0-.166-.761l-2-1z"/>
+</svg></label>
+						</div>
+					</div>
+            	</div>
+			</div>
+			<div class="row">
+				<div class="col-sm">
+					<label for="evolucao">Evolução</label>
+					<textarea class="form-control" id="evolucao" rows="3"></textarea>
+            	</div>
+			</div>
+			<div class="row">
+				<div class="col-sm">
+					<button type="button" id="yesEncerrar" onClick="fimSessao()" class="btn btn-primary button">Encerrar Sessão</button>
+				</div>
+			</div>
+		</div>   
+	</div>
+
+</div>
+
+<script>
+
+    let pagina = 0;
+
+    if(pagina == 0){
+        document.getElementById("vibracaoDiv").style.display = "none";
+		document.getElementById("formFinalCampos").style.display = "none";
+	}
+
+    function pages() {
+        pagina++;
+        if (pagina == 1) {
+            document.getElementById("vibracaoDiv").style.display = "block";
+            document.getElementById("formInicial").style.display = "none";
+            document.getElementById("formInicialCampos").style.display = "none";
+			document.getElementById("formFinalCampos").style.display = "none";
+        }
+		if (pagina == 2) {
+			document.getElementById("vibracaoDiv").style.display = "none";
+            document.getElementById("formInicial").style.display = "none";
+            document.getElementById("formInicialCampos").style.display = "none";
+			document.getElementById("formFinalCampos").style.display = "block";
+		}
+    }
+
+</script>
+
+<script type="text/javascript">
+		var ctx = document.getElementById("myChart").getContext("2d");
+		var myChart = new Chart(ctx, {
+			type: 'line',
+			data: {
+				labels: [],
+				datasets: [
+					{
+						label: ["Eixo X"],
+						backgroundColor: "rgba(255, 99, 132)",
+						borderColor: "rgba(255, 99, 132)",
+						data: [],
+						fill: false,
+					},
+				]
+			},
+			options: {
+				responsive: true,
+				maintainAspectRatio: false,
+				scales: {
+					yAxes: [{
+						scaleLabel: {
+							display: true,
+							labelString: 'Aceleração (m/s²)'
+						}
+					}],
+					xAxes: [{
+						scaleLabel: {
+							display: true,
+							labelString: 'Frequência (Hz)',
+							type: 'time',
+						},
+					}]
+				}     
+			}
+		});
+
+		var ctxY = document.getElementById("myChartY").getContext("2d");
+		var myChartY = new Chart(ctxY, {
+			type: 'line',
+			data: {
+				labels: [],
+				datasets: [
+					{
+						label: ["Eixo Y"],
+						backgroundColor: "rgba(51, 204, 255)",
+						borderColor: "rgba(51, 204, 255)",
+						data: [],
+						fill: false,
+					},
+				]
+			},
+			options: {
+				responsive: true,
+				maintainAspectRatio: false,
+				scales: {
+					yAxes: [{
+						scaleLabel: {
+							display: true,
+							labelString: 'Aceleração (m/s²)'
+						}
+					}],
+					xAxes: [{
+						scaleLabel: {
+							display: true,
+							labelString: 'Frequência (Hz)',
+							type: 'time',
+						},
+					}]
+				}     
+			}
+		});
+
+		var ctxZ = document.getElementById("myChartZ").getContext("2d");
+		var myChartZ = new Chart(ctxZ, {
+			type: 'line',
+			data: {
+				labels: [],
+				datasets: [
+					{
+						label: ["Eixo Z"],
+						backgroundColor: "rgba(60,179,113)",
+						borderColor: "rgba(60,179,113)",
+						data: [],
+						fill: false,
+					},
+				]
+			},
+			options: {
+				responsive: true,
+				maintainAspectRatio: false,
+				scales: {
+					yAxes: [{
+						scaleLabel: {
+							display: true,
+							labelString: 'Aceleração (m/s²)'
+						}
+					}],
+					xAxes: [{
+						scaleLabel: {
+							display: true,
+							labelString: 'Frequência (Hz)',
+							type: 'time',
+						},
+					}]
+				}     
+			}
+		});
+		
+        let tempoDeInicio;
+
+        let vibracao_picoX = [];
+        let vibracao_picoY = [];
+        let vibracao_picoZ = [];
+        let vibracao_tempo = [];
+
+		let vibracao_mediaX = [];
+		let vibracao_mediaY = [];
+		let vibracao_mediaZ = [];
+
+		let arrayY = [];
+		let arrayX = [];
+		let arrayZ = [];
+		let arrayLabelX = [];
+		let arrayLabelY = [];
+		let arrayLabelZ = [];
+		let peekX = 0;
+		let peekY = 0;
+		let peekZ = 0;
+
+		let somaPicoX = 0;
+		let somaPicoY = 0;
+		let somaPicoZ = 0;
+
+		let contPX = 0;
+		let contPY = 0;
+		let contPZ = 0;
+
+		let mediaX = 0;
+		let mediaY = 0;
+		let mediaZ = 0
+
+		function addData(array, arrayLabel, label, data) {
+			arrayLabel.push(label);
+			array.push(data);
+		}
+
+		function plotar() {
+			//arrayX.shift();
+			//arrayX.shift();
+			//arrayLabelX.shift();
+			//arrayLabelX.shift();
+			myChart.data.labels = arrayLabelX;
+			myChart.data.datasets[0].data = arrayX;
+			myChart.update();
+			arrayX = [];
+			arrayLabelX = [];
+
+			//arrayY.shift();
+			//arrayY.shift();
+			//arrayLabelY.shift();
+			//arrayLabelY.shift();
+			myChartY.data.labels = arrayLabelY;
+			myChartY.data.datasets[0].data = arrayY;
+			myChartY.update();
+			arrayY = [];
+			arrayLabelY = [];
+
+			//arrayZ.shift();
+			//arrayZ.shift();
+			//arrayLabelZ.shift();
+			//arrayLabelZ.shift();
+			myChartZ.data.labels = arrayLabelZ;
+			myChartZ.data.datasets[0].data = arrayZ;
+			myChartZ.update();
+			arrayZ = [];
+			arrayLabelZ = [];
+		}
+
+		var frequencia = 0;
+		let cont = 0;
+
+
+		var socket = io();
+		socket.on("dadosArduino", function(dado) {
+			const eixo = dado.substring(0,1);
+			const func = dado.substring(1,2);
+			const newDado = parseFloat(dado.substring(2));
+			if(eixo === 'f') {
+				frequencia = newDado;
+			}
+			else if(eixo == 'x') {
+				/*if(func == 'p' && !isNaN(newDado)) {
+					peekX = newDado;
+					somaPicoX = somaPicoX + newDado;
+					contPX++;
+				}
+				if(func == 'p' && isNaN(newDado)) {
+					peekX = 0;
+					somaPicoX = somaPicoX + 0;
+					contPX++;
+				}*/
+				if(func == 'a')
+					addData(arrayX, arrayLabelX, frequencia, newDado);
+			}	
+			else if(eixo == 'y') {
+				/*if(func == 'p' && !isNaN(newDado)) {
+					peekY = newDado;
+					somaPicoY = somaPicoX + newDado;
+					contPY++;
+				}
+				if(func == 'p' && isNaN(newDado)) {
+					peekY = 0;
+					somaPicoY = somaPicoX + 0;
+					contPY++;
+				}*/
+				if(func == 'a')
+					addData(arrayY, arrayLabelY, frequencia, newDado);
+			}
+			else if(eixo == 'z') {
+				/*if(func == 'p' && !isNaN(newDado)) {
+					peekZ = newDado;
+					somaPicoZ = somaPicoX + newDado;
+					contPZ++;
+				}
+				if(func == 'p' && isNaN(newDado)) {
+					peekZ = 0;
+					somaPicoZ = somaPicoX + 0;
+					contPZ++;
+				}*/
+				if(func == 'a')
+					addData(arrayZ, arrayLabelZ, frequencia, newDado);
+			}
+			else if(eixo == '-') {
+				let valX = Math.max.apply(Math, arrayX);
+				let valY = Math.max.apply(Math, arrayY);
+				let valZ = Math.max.apply(Math, arrayZ);
+
+				let posX = arrayX.indexOf(valX);
+				let posY = arrayY.indexOf(valY);
+				let posZ = arrayZ.indexOf(valZ);
+				
+				let picX = arrayLabelX[posX];
+				let picY = arrayLabelY[posY];
+				let picZ = arrayLabelZ[posZ];
+
+				plotar();
+				
+				somaPicoX = somaPicoX + picX;
+				contPX++;
+
+				somaPicoY = somaPicoY + picY;
+				contPY++;
+
+				somaPicoZ = somaPicoZ + picZ;
+				contPZ++;
+
+				vibracao_picoX.push(picX);
+                vibracao_picoY.push(picY);
+                vibracao_picoZ.push(picZ);
+
+				document.getElementById("picoX").innerHTML = picX;
+				document.getElementById("picoY").innerHTML = picY;
+				document.getElementById("picoZ").innerHTML = picZ;
+                vibracao_tempo.push((Date.now() - tempoDeInicio)/1000);
+
+				mediaX = somaPicoX/contPX;
+				mediaY = somaPicoY/contPY;
+				mediaZ = somaPicoZ/contPZ;
+				if(!isNaN(mediaX))
+					vibracao_mediaX.push(mediaX);
+				if(!isNaN(mediaY))
+					vibracao_mediaY.push(mediaY);
+				if(!isNaN(mediaZ))
+					vibracao_mediaZ.push(mediaZ);
+				document.getElementById("mediapicoX").innerHTML = mediaX.toFixed(2);
+				document.getElementById("mediapicoY").innerHTML = mediaY.toFixed(2);
+				document.getElementById("mediapicoZ").innerHTML = mediaZ.toFixed(2);
+				if((mediaZ > 0 && mediaZ < 12 && mediaX > 0 && mediaX < 12 && mediaY > 0 && mediaY < 12) || (mediaZ > 30 && mediaX > 30 && mediaY > 30)) {
+					document.getElementById('estadoId').style.backgroundColor = '#c73e3eee;';
+					document.getElementById('estadoId').style.color = 'white';
+				}
+				if((mediaZ >= 12 && mediaZ < 15 && mediaX >= 12 && mediaX < 15 && mediaY >= 12 && mediaY < 15) || (mediaZ > 24 && mediaX > 24 && mediaY > 24)) {
+					document.getElementById('estadoId').style.backgroundColor = 'yellow';
+					document.getElementById('estadoId').style.color = 'black';
+				}
+				if((mediaZ >= 15 && mediaZ <= 24 && mediaX >= 15 && mediaX <= 24 && mediaY >= 15 && mediaY <= 24)) {
+					document.getElementById('estadoId').style.backgroundColor = 'green';
+					document.getElementById('estadoId').style.color = 'white';
+				}
+			}
+		});
+
+		let hour = 0;
+		let minute = 0;
+		let second = 0;
+		let millisecond = 0;
+
+		let cron;
+        let tempoDeFim;
+
+		function pararTransmissao() {
+			socket.emit("parar");
+			document.getElementById('parada').disabled = true;
+            tempoDeFim = (Date.now() - tempoDeInicio)/1000;
+			clearInterval(cron);
+		}
+
+		function comecarTransmissao() {
+			socket.emit("comecar");
+			document.getElementById('comeco').disabled = true;
+            tempoDeInicio = Date.now();
+			clearInterval(cron);
+			cron = setInterval(() => { timer(); }, 10);
+		}
+
+		function timer() {
+			if ((millisecond += 10) == 1000) {
+				millisecond = 0;
+				second++;
+			}
+			if (second == 60) {
+				second = 0;
+				minute++;
+			}
+			if (minute == 60) {
+				minute = 0;
+				hour++;
+			}
+			document.getElementById('hour').innerText = returnData(hour);
+			document.getElementById('minute').innerText = returnData(minute);
+			document.getElementById('second').innerText = returnData(second);
+			document.getElementById('millisecond').innerText = returnData(millisecond);
+		}
+
+		function returnData(input) {
+			return input > 10 ? input : `0${input}`
+		}
+
+
+    function fimSessao() {
+
+		let valor_grau = null;
+		var radios = document.getElementsByName('flexRadioDefault');
+		for (var i = 0, length = radios.length; i < length; i++) {
+  			if (radios[i].checked) {
+				valor_grau = i+1;
+				break;
+  			}
+		}
+
+		let valor_grau2 = null;
+		var radios2 = document.getElementsByName('flexRadioDefaultFinal');
+		for (var i = 0, length = radios2.length; i < length; i++) {
+  			if (radios2[i].checked) {
+				valor_grau2 = i+1;
+				break;
+  			}
+		}
+
+		let valor_estadoP = null;
+		var estados1 = document.getElementsByName('flexEstadoPaciente');
+		for (var i = 0, length = estados1.length; i < length; i++) {
+  			if (estados1[i].checked) {
+				valor_estadoP = i+1;
+				break;
+  			}
+		}
+
+		console.log('valor estadop: ' + valor_estadoP);
+
+		let valor_estadoF = null;
+		var estados2 = document.getElementsByName('flexEstadoFisio');
+		for (var i = 0, length = estados2.length; i < length; i++) {
+  			if (estados2[i].checked) {
+				valor_estadoF = i+1;
+				break;
+  			}
+		}
+
+		console.log('valor estadof: ' + valor_estadoF);
+
+        fetch('/sessao', {
+             method: 'POST',
+             headers: { 'Content-type': 'application/json' },
+             body: JSON.stringify({
+                paciente_id: document.getElementById('paciente_id').value,
+                fisioterapeuta_id: document.getElementById('fisioterapeuta_id').value,
+				tecnica_id: document.getElementById('tecnica_id').value,
+				sensor: document.getElementById('sensor').value, 
+				freq_respiratoria_inicial: document.getElementById('freq_respiratoria_inicial').value, 
+				freq_cardiaca_inicial: document.getElementById('freq_cardiaca_inicial').value, 
+				sat_oxigenio_inicial: document.getElementById('sat_oxigenio_inicial').value, 
+				pressao_arterial_inicial: document.getElementById('pressao_arterial_inicial').value, 
+				grau_inicial: valor_grau,
+				freq_respiratoria_final: document.getElementById('freq_respiratoria_final').value,
+				freq_cardiaca_final: document.getElementById('sat_oxigenio_final').value, 
+				sat_oxigenio_final: document.getElementById('sat_oxigenio_final').value, 
+				pressao_arterial_final: document.getElementById('pressao_arterial_final').value, 
+				grau_final: valor_grau2,
+				evolucao: document.getElementById('evolucao').value,
+				estado_paciente: valor_estadoP,
+				estado_fisio: valor_estadoF,
+                vibracao_pico_x: vibracao_picoX,
+                vibracao_pico_y: vibracao_picoY,
+                vibracao_pico_z: vibracao_picoZ,
+                vibracao_tempo: vibracao_tempo,
+				vibracao_media_x: mediaX,
+				vibracao_media_y: mediaY,
+				vibracao_media_z: mediaZ,
+				vibracao_media_pico_x: vibracao_mediaX,
+				vibracao_media_pico_y: vibracao_mediaY,
+				vibracao_media_pico_z: vibracao_mediaZ,
+                vibracao_tempo_total: tempoDeFim
+             }),
+        }).then(ref => {
+			saveSuccessfullRequestToLocalStorage();
+            window.location.href = '';
+        });
+    }
+
+	</script>
+
+	<script>
+		checkSuccessfullRequest();
+
+		function saveSuccessfullRequestToLocalStorage() {
+			localStorage.setItem("_success", true);
+		}
+
+		function clearSuccessfullRequest() {
+			localStorage.removeItem("_success");
+		}
+
+		function checkSuccessfullRequest() {
+			const successfullRequest = localStorage.getItem("_success");
+
+			if (successfullRequest) {
+				alert("Sessão registrada com sucesso!");
+				clearSuccessfullRequest();
+			}
+		}
+	</script>
+	

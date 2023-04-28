@@ -1,0 +1,9 @@
+{
+  "development" : {
+    "username"  : "willians",
+    "password"  : "123",
+    "database"  : "fisio-lung",
+    "host"      : "localhost",
+    "dialect"   : "mysql"
+  }
+}

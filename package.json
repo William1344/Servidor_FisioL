@@ -1,0 +1,42 @@
+{
+  "name": "server-williams1344",
+  "version": "1.0.0",
+  "description": "Servidor para tratar requisições e gerenciar banco de dados.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap": "^5.2.3",
+    "chart.js": "^4.1.2",
+    "connect-flash": "^0.1.1",
+    "cors": "^2.8.5",
+    "date-fns": "^2.29.3",
+    "dotenv": "^16.0.3",
+    "dspjs": "^1.0.0",
+    "express": "^4.18.2",
+    "express-handlebars": "^6.0.6",
+    "html-pdf": "^3.0.1",
+    "html-pdf-node": "^1.0.8",
+    "moment": "^2.29.4",
+    "morgan": "^1.10.0",
+    "mysql2": "^2.3.3",
+    "nodejs-base64-converter": "^1.0.5",
+    "pg": "^8.8.0",
+    "pg-hstore": "^2.3.4",
+    "puppeteer": "^19.5.0",
+    "scramjet": "^4.36.9",
+    "sequelize": "^6.28.0",
+    "sequelize-cli": "^6.5.2",
+    "serialport": "^10.5.0",
+    "socket.io": "^4.5.4",
+    "swig": "^1.4.2",
+    "tmp": "^0.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}

@@ -1,0 +1,42 @@
+.principal {
+    margin-top: 30px;
+    margin-left: 80px;
+    margin-right: 80px;
+    margin-bottom: 25px;
+}
+
+.graph {
+    border: 2px;
+    border-color: black;
+    border-style: solid;
+    width: 80px;
+    height: 500px;
+    margin-bottom: 5px;
+}
+
+.estado {
+    width: 100px;
+    margin-top: 10px;
+    margin-left: 20%;
+    margin-right: 20%;
+    background:#c73e3eee;
+    color:#fff;
+    line-height:150px;
+    text-align:center;
+    font-size:30px;
+}
+
+.dados {
+    margin-left: 20px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.dados h5{
+    margin-left: 5px;
+}
+
+.dados button {
+    margin-bottom: 5px;
+    width: 200px;
+}
